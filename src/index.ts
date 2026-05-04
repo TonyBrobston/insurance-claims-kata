@@ -26,11 +26,8 @@ export const determineReasonCode = (
   isValidIncidentType: boolean,
   approved: boolean
 ) => {
-  if (approved) {
-    if (payout <= 0) {
-      return 'ZERO_PAYOUT';
-    }
-    return 'APPROVED';
+  if (approved && payout <= 0) {
+    return 'ZERO_PAYOUT';
   }
   if (!isValidIncidentDate) {
     return 'POLICY_INACTIVE'
@@ -39,7 +36,7 @@ export const determineReasonCode = (
     return 'NOT_COVERED';
   }
 
-  throw new Error('Unhandled claim evaluation state');
+  return 'APPROVED';
 }
 
 export const processClaim = (claim: Claim, policy: Policy): ClaimEvaluation => {

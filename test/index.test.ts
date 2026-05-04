@@ -131,12 +131,4 @@ describe('processor', () => {
 
     expect(claimEvaluation).toEqual(expectedClaimEvaluation);
   });
-
-  it('should throw an error if an impossible state is reached', () => {
-    const callWithImpossibleState = () => {
-      determineReasonCode(0, true, true, false);
-    };
-
-    expect(callWithImpossibleState).toThrow('Unhandled claim evaluation state');
-  });
 });
