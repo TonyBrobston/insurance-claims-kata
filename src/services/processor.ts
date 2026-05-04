@@ -20,7 +20,7 @@ const determinePayout = (
   return 0;
 }
 
-const determineReasonCode = (
+export const determineReasonCode = (
   payout: number,
   isValidIncidentDate: boolean,
   isValidIncidentType: boolean,
@@ -38,7 +38,8 @@ const determineReasonCode = (
   if (!isValidIncidentType) {
     return 'NOT_COVERED';
   }
-  return 'NOT_COVERED';
+
+  throw new Error('Unhandled claim evaluation state');
 }
 
 export const processClaim = (claim: Claim, policy: Policy): ClaimEvaluation => {

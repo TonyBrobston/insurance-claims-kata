@@ -1,4 +1,4 @@
-import { processClaim } from '../../src/services/processor';
+import { processClaim, determineReasonCode } from '../../src/services/processor';
 import { Policy } from '../../src/types';
 
 describe('processor', () => {
@@ -130,5 +130,13 @@ describe('processor', () => {
     const claimEvaluation = processClaim(claim, policy);
 
     expect(claimEvaluation).toEqual(expectedClaimEvaluation);
+  });
+
+  it('should throw an error if an impossible state is reached', () => {
+    const callWithImpossibleState = () => {
+      determineReasonCode(0, true, true, false);
+    };
+
+    expect(callWithImpossibleState).toThrow('Unhandled claim evaluation state');
   });
 });
