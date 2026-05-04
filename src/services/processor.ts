@@ -2,11 +2,16 @@ import { Claim, Policy, ClaimEvaluation, IncidentType } from '../../src/types';
 import { incidentTypes } from '../constants';
 
 const determineReasonCode = (
+  payout: number,
   isValidIncidentDate: boolean,
   isValidIncidentType: boolean,
   approved: boolean
 ) => {
+  console.log('payout:', payout);
   if (approved) {
+    if (payout === 0) {
+      return 'ZERO_PAYOUT';
+    }
     return 'APPROVED';
   }
   if (!isValidIncidentDate) {
@@ -25,7 +30,7 @@ export const processClaim = (claim: Claim, policy: Policy): ClaimEvaluation => {
   const isValidIncidentType = incidentTypes.includes(incidentType as IncidentType);
   const approved = isValidIncidentDate && isValidIncidentType;
   const payout = approved ? amountClaimed - deductible : 0;
-  const reasonCode = determineReasonCode(isValidIncidentDate, isValidIncidentType, approved);
+  const reasonCode = determineReasonCode(payout, isValidIncidentDate, isValidIncidentType, approved);
   return {
     approved,
     payout,
