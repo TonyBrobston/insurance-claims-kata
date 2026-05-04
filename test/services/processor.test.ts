@@ -8,8 +8,6 @@ describe('processor', () => {
     incidentDate: new Date('2023-02-01'),
     amountClaimed: 3000,
   };
-  const activePolicyDate = new Date('2023-01-02');
-  const inactivePolicyDate = new Date('2022-01-02');
   const policy = {
     policyId: 'POL123',
     startDate: new Date('2023-01-01'),
@@ -21,10 +19,10 @@ describe('processor', () => {
 
   it.each([
     {
-      name: 'should be an active policy on the incident date',
+      name: 'should be an active policy when incident date is equal to start date',
       claim: {
         ...baseClaim,
-        incidentDate: activePolicyDate,
+        incidentDate: new Date('2023-01-01'),
       },
       expectedClaimEvaluation: {
         approved: true,
@@ -33,10 +31,46 @@ describe('processor', () => {
       }
     },
     {
-      name: 'should not be an active policy on the incident date',
+      name: 'should be an active policy when incident date is equal to end date',
       claim: {
         ...baseClaim,
-        incidentDate: inactivePolicyDate,
+        incidentDate: new Date('2024-01-01'),
+      },
+      expectedClaimEvaluation: {
+        approved: true,
+        payout: 2500,
+        reasonCode: 'APPROVED',
+      }
+    },
+    {
+      name: 'should be an active policy when incident date is between start and end date',
+      claim: {
+        ...baseClaim,
+        incidentDate: new Date('2023-01-02'),
+      },
+      expectedClaimEvaluation: {
+        approved: true,
+        payout: 2500,
+        reasonCode: 'APPROVED',
+      }
+    },
+    {
+      name: 'should not be an active policy when incident date is before start date',
+      claim: {
+        ...baseClaim,
+        incidentDate: new Date('2022-12-31'),
+      },
+      expectedClaimEvaluation: {
+        approved: false,
+        payout: 0,
+        reasonCode: 'POLICY_INACTIVE',
+      }
+    },
+    {
+      name: 'should not be an active policy when incident date is after end date',
+      claim: {
+        ...baseClaim,
+        incidentDate: new Date('2024-01-02'),
       },
       expectedClaimEvaluation: {
         approved: false,
