@@ -5,6 +5,7 @@ describe('processor', () => {
   const baseClaim = {
     policyId: 'POL123',
     incidentType: 'fire',
+    incidentDate: new Date('2023-02-01'),
     amountClaimed: 3000,
   };
   const activePolicyDate = new Date('2023-01-02');
@@ -41,6 +42,18 @@ describe('processor', () => {
         approved: false,
         payout: 0,
         reasonCode: 'POLICY_INACTIVE',
+      }
+    },
+    {
+      name: 'should not allow incident types that are not in covered incidents',
+      claim: {
+        ...baseClaim,
+        incidentType: 'tornado'
+      },
+      expectedClaimEvaluation: {
+        approved: false,
+        payout: 0,
+        reasonCode: 'NOT_COVERED',
       }
     }
   ])('$name', ({ claim, expectedClaimEvaluation }) => {
