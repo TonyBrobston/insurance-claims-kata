@@ -7,6 +7,8 @@ describe('processor', () => {
     incidentType: 'fire',
     amountClaimed: 3000,
   };
+  const activePolicyDate = new Date('2023-01-02');
+  const inactivePolicyDate = new Date('2022-01-02');
   const policy = {
     policyId: 'POL123',
     startDate: new Date('2023-01-01'),
@@ -16,35 +18,34 @@ describe('processor', () => {
     coveredIncidents: ['accident', 'fire'],
   } as Policy;
 
-  it('should be an active policy on the incident date', () => {
-    const activePolicyDate = new Date('2023-01-02');
-    const claim = {
-      incidentDate: activePolicyDate,
-      ...baseClaim,
-    };
-
-    const claimEvaluation = processClaim(claim, policy);
-
-    expect(claimEvaluation).toEqual({
-      approved: true,
-      payout: 2500,
-      reasonCode: 'APPROVED',
-    });
-  });
-
-  it('should not be an active policy on the incident date', () => {
-    const inactivePolicyDate = new Date('2022-01-02');
-    const claim = {
-      incidentDate: inactivePolicyDate,
-      ...baseClaim,
+  it.each([
+    {
+      name: 'should be an active policy on the incident date',
+      claim: {
+        incidentDate: activePolicyDate,
+        ...baseClaim,
+      },
+      expectedClaimEvaluation: {
+        approved: true,
+        payout: 2500,
+        reasonCode: 'APPROVED',
+      }
+    },
+    {
+      name: 'should not be an active policy on the incident date',
+      claim: {
+        incidentDate: inactivePolicyDate,
+        ...baseClaim,
+      },
+      expectedClaimEvaluation: {
+        approved: false,
+        payout: 0,
+        reasonCode: 'POLICY_INACTIVE',
+      }
     }
-
+  ])('$name', ({ claim, expectedClaimEvaluation }) => {
     const claimEvaluation = processClaim(claim, policy);
 
-    expect(claimEvaluation).toEqual({
-      approved: false,
-      payout: 0,
-      reasonCode: 'POLICY_INACTIVE',
-    });
+    expect(claimEvaluation).toEqual(expectedClaimEvaluation);
   });
 });
