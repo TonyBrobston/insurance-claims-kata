@@ -79,7 +79,19 @@ describe('processor', () => {
         payout: 0,
         reasonCode: 'ZERO_PAYOUT',
       }
-    }
+    },
+    {
+      name: 'should not exceed coverage limit',
+      claim: {
+        ...baseClaim,
+        amountClaimed: 10501,
+      },
+      expectedClaimEvaluation: {
+        approved: true,
+        payout: 10000,
+        reasonCode: 'APPROVED',
+      }
+    },
   ])('$name', ({ claim, expectedClaimEvaluation }) => {
     const claimEvaluation = processClaim(claim, policy);
 
