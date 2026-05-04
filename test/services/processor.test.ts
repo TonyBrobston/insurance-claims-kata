@@ -55,6 +55,18 @@ describe('processor', () => {
         payout: 0,
         reasonCode: 'NOT_COVERED',
       }
+    },
+    {
+      name: 'should return ZERO_PAYOUT when payout is zero',
+      claim: {
+        ...baseClaim,
+        amountClaimed: 500,
+      },
+      expectedClaimEvaluation: {
+        approved: true,
+        payout: 0,
+        reasonCode: 'ZERO_PAYOUT',
+      }
     }
   ])('$name', ({ claim, expectedClaimEvaluation }) => {
     const claimEvaluation = processClaim(claim, policy);
