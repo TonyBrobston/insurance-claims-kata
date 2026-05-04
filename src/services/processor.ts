@@ -27,7 +27,7 @@ const determineReasonCode = (
   approved: boolean
 ) => {
   if (approved) {
-    if (payout === 0 || payout < 0) {
+    if (payout <= 0) {
       return 'ZERO_PAYOUT';
     }
     return 'APPROVED';
