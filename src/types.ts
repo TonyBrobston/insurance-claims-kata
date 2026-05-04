@@ -1,3 +1,5 @@
+import { incidentTypes } from "./constants";
+
 export interface Claim {
   policyId: string;
   incidentType: string;
@@ -11,7 +13,7 @@ export interface ClaimEvaluation {
   reasonCode: 'APPROVED' | 'POLICY_INACTIVE' | 'NOT_COVERED' | 'ZERO_PAYOUT';
 }
 
-type IncidentType = 'accident' | 'theft' | 'fire' | 'water damage';
+export type IncidentType = typeof incidentTypes[number];
 
 export interface Policy {
   policyId: string;
@@ -21,4 +23,3 @@ export interface Policy {
   coverageLimit: number;
   coveredIncidents: IncidentType[];
 }
-

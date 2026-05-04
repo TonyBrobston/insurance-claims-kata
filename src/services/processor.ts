@@ -1,11 +1,31 @@
-import { Claim, Policy, ClaimEvaluation } from '../../src/types';
+import { Claim, Policy, ClaimEvaluation, IncidentType } from '../../src/types';
+import { incidentTypes } from '../constants';
+
+const determineReasonCode = (
+  isValidIncidentDate: boolean,
+  isValidIncidentType: boolean,
+  approved: boolean
+) => {
+  if (approved) {
+    return 'APPROVED';
+  }
+  if (!isValidIncidentDate) {
+    return 'POLICY_INACTIVE'
+  }
+  if (!isValidIncidentType) {
+    return 'NOT_COVERED';
+  }
+  return 'NOT_COVERED';
+}
 
 export const processClaim = (claim: Claim, policy: Policy): ClaimEvaluation => {
-  const { incidentDate, amountClaimed } = claim;
+  const { incidentDate, amountClaimed, incidentType } = claim;
   const { startDate, endDate, deductible } = policy;
-  const approved = startDate <= incidentDate && incidentDate <= endDate;
+  const isValidIncidentDate = startDate <= incidentDate && incidentDate <= endDate;
+  const isValidIncidentType = incidentTypes.includes(incidentType as IncidentType);
+  const approved = isValidIncidentDate && isValidIncidentType;
   const payout = approved ? amountClaimed - deductible : 0;
-  const reasonCode = approved ? 'APPROVED' : 'POLICY_INACTIVE';
+  const reasonCode = determineReasonCode(isValidIncidentDate, isValidIncidentType, approved);
   return {
     approved,
     payout,
