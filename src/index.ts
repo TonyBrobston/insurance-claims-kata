@@ -1,5 +1,5 @@
-import { Claim, Policy, ClaimEvaluation, IncidentType } from '../../src/types';
-import { incidentTypes } from '../constants';
+import { Claim, Policy, ClaimEvaluation, IncidentType } from './types';
+import { incidentTypes } from './constants';
 
 const determinePayout = (
   approved: boolean,

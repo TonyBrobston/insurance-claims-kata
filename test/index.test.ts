@@ -1,5 +1,5 @@
-import { processClaim, determineReasonCode } from '../../src/services/processor';
-import { Policy } from '../../src/types';
+import { processClaim, determineReasonCode } from '../src/index';
+import { Policy } from '../src/types';
 
 describe('processor', () => {
   const baseClaim = {
