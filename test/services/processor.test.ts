@@ -22,8 +22,8 @@ describe('processor', () => {
     {
       name: 'should be an active policy on the incident date',
       claim: {
-        incidentDate: activePolicyDate,
         ...baseClaim,
+        incidentDate: activePolicyDate,
       },
       expectedClaimEvaluation: {
         approved: true,
@@ -34,8 +34,8 @@ describe('processor', () => {
     {
       name: 'should not be an active policy on the incident date',
       claim: {
-        incidentDate: inactivePolicyDate,
         ...baseClaim,
+        incidentDate: inactivePolicyDate,
       },
       expectedClaimEvaluation: {
         approved: false,
