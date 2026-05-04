@@ -11,7 +11,8 @@ const determinePayout = (
     const payout = amountClaimed - deductible;
     if (payout < 0) {
       return 0;
-    } else if (payout > coverageLimit) {
+    }
+    if (payout > coverageLimit) {
       return coverageLimit;
     }
     return payout
