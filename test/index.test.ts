@@ -1,4 +1,4 @@
-import { processClaim, determineReasonCode } from '../src/index';
+import { processClaim } from '../src/index';
 import { Policy } from '../src/types';
 
 describe('processor', () => {
